@@ -9,9 +9,8 @@ on:
       - main
 
 jobs:
-  if: github.repository.fork == false
-  
   build:
+    if: github.repository.fork == false  
 
     runs-on: ubuntu-latest
 
