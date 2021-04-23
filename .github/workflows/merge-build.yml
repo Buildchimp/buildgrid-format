@@ -10,8 +10,6 @@ on:
 
 jobs:
   build:
-    if: ${{ github.repository.fork == false }}  
-
     runs-on: ubuntu-latest
 
     steps:
@@ -62,4 +60,11 @@ jobs:
         servers: '[{ "id": "sonatype", "username": "${{ secrets.SONATYPE_BOT_USERNAME}}", "password": "${{ secrets.SONATYPE_BOT_TOKEN}}" }]'
 
     - name: "Maven Build & Deploy Snapshot to Sonatype OSSRH"
-      run: mvn -B -e deploy -DaltSnapshotDeploymentRepository=sonatype::default::https://oss.sonatype.org/content/repositories/snapshots/
+      if: ${{ github.repository.fork == true }}
+
+      run: mvn -B -e deploy -DaltDeploymentRepository=sonatype::default::https://oss.sonatype.org/content/repositories/snapshots/
+
+    - name: "Maven Build"
+      if: ${{ github.repository.fork == false }}
+
+      run: mvn -B -e verify
