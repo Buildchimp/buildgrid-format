@@ -4,14 +4,14 @@ import java.util.List;
 
 public class BuildOrder
 {
-    private List<ProjectDependencies> buildorder;
+    private List<ProjectRef> buildorder;
 
-    public BuildOrder( List<ProjectDependencies> buildorder )
+    public BuildOrder( List<ProjectRef> buildorder )
     {
         this.buildorder = buildorder;
     }
 
-    public List<ProjectDependencies> getBuildorder()
+    public List<ProjectRef> getBuildorder()
     {
         return buildorder;
     }
