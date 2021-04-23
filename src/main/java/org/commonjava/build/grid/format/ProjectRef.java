@@ -2,7 +2,11 @@ package org.commonjava.build.grid.format;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.Objects;
+import java.util.HashSet;
+import java.util.Set;
+
+import static org.commonjava.build.grid.format.RefUtils.getGA;
+import static org.commonjava.build.grid.format.RefUtils.getProjectPath;
 
 public class ProjectRef
 {
@@ -10,21 +14,25 @@ public class ProjectRef
 
     private final String path;
 
+    private final Set<DependencyRef> dependencies;
+
     public ProjectRef( Path basepath, File projectFile, String groupId, String artifactId )
     {
+        this.dependencies = new HashSet<>();
         this.ga = getGA( groupId, artifactId );
         this.path = getProjectPath( basepath, projectFile );
     }
 
-    public static String getProjectPath( Path basepath, File projectFile )
+    public ProjectRef( String ga, String path, Set<DependencyRef> dependencies )
     {
-        Path p = basepath.relativize( projectFile.toPath() ).getParent();
-        return "./" + ( p == null ? "" : p.toString() );
+        this.ga = ga;
+        this.path = path;
+        this.dependencies = dependencies;
     }
 
-    public static String getGA( String groupId, String artifactId )
+    public void addDependencyRef( DependencyRef dependencyRef )
     {
-        return String.format( "%s:%s", groupId, artifactId );
+        dependencies.add( dependencyRef );
     }
 
     public String getGa()
@@ -37,20 +45,8 @@ public class ProjectRef
         return path;
     }
 
-    @Override
-    public boolean equals( Object o )
+    public Set<DependencyRef> getDependencies()
     {
-        if ( this == o )
-            return true;
-        if ( o == null || getClass() != o.getClass() )
-            return false;
-        ProjectRef that = (ProjectRef) o;
-        return getGa().equals( that.getGa() );
-    }
-
-    @Override
-    public int hashCode()
-    {
-        return Objects.hash( getGa() );
+        return dependencies;
     }
 }
