@@ -35,7 +35,7 @@ jobs:
       if: ${{ github.event.repository.fork == false }}
 
       run: |
-        mvn -B -e deploy
+        mvn -P gh-push -B -e deploy
 
     - name: "Maven Build"
       if: ${{ github.event.repository.fork == true }}
