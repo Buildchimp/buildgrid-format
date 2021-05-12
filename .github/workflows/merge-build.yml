@@ -37,15 +37,9 @@ jobs:
           ]
         servers: |
           [
-            { "id": "sonatype", "username": "${{SONATYPE_BOT_USERNAME}}", "password": "${{SONATYPE_BOT_TOKEN}}" }, 
-            { "id": "github", "username": "${{GITHUB_ACTOR}}", "password": "${{GITHUB_TOKEN}}" }
+            { "id": "sonatype", "username": "${{secrets.SONATYPE_BOT_USERNAME}}", "password": "${{secrets.SONATYPE_BOT_TOKEN}}" }, 
+            { "id": "github", "username": "${{secrets.GITHUB_ACTOR}}", "password": "${{secrets.GITHUB_TOKEN}}" }
           ]
-
-      env:
-        SONATYPE_BOT_USERNAME: ${{secrets.SONATYPE_BOT_USERNAME}}
-        SONATYPE_BOT_TOKEN: ${{secrets.SONATYPE_BOT_TOKEN}}
-        GITHUB_ACTOR: ${{ secrets.GITHUB_ACTOR }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: "Maven Build & Deploy Snapshot to Sonatype OSSRH"
       if: ${{ github.event.repository.fork == false }}
