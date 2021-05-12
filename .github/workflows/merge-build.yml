@@ -25,12 +25,17 @@ jobs:
       uses: whelk-io/maven-settings-xml-action@v14
       with:
         repositories: '[{ "id": "sonatype", "url": "https://oss.sonatype.org/content/repositories/snapshots/", "releases": {"enabled": "false"}, "snapshots": {"enabled": "true" }}]'
-        servers: '[{ "id": "sonatype", "username": "${{ secrets.SONATYPE_BOT_USERNAME}}", "password": "${{ secrets.SONATYPE_BOT_TOKEN}}" }]'
+        servers: |
+          [
+            { "id": "sonatype", "username": "${{ secrets.SONATYPE_BOT_USERNAME}}", "password": "${{ secrets.SONATYPE_BOT_TOKEN}}" }, 
+            { "id": "github", "username": "${{ secrets.GITHUB_ACTOR}}", "password": "${{ secrets.GITHUB_TOKEN}}" }
+          ]
 
     - name: "Maven Build & Deploy Snapshot to Sonatype OSSRH"
       if: ${{ github.event.repository.fork == false }}
 
-      run: mvn -B -e deploy -DaltDeploymentRepository=sonatype::default::https://oss.sonatype.org/content/repositories/snapshots/
+      run: |
+        mvn -B -e deploy
 
     - name: "Maven Build"
       if: ${{ github.event.repository.fork == true }}
